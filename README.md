@@ -6,14 +6,19 @@
 
 ## Python Modules
 
+### Preinstalled  
   •os<br/>
   •time<br/>
   •sys<br/>
   •requests<br/>
-  •termcolor<br/>
-  •selenium<br/>
-  •progressBar<br/>
+## Needs to be installed separately  
+  •[termcolor](https://pypi.org/project/termcolor/)<br/>
+  •[selenium](https://pypi.org/project/selenium/)<br/>
+  •[progressBar](https://progressbar-2.readthedocs.io/en/latest/installation.html)<br/>
 
+
+  obs-> You also need to download [chromedriver](http://chromedriver.chromium.org/downloads)<br/>
+        If you are on the raspberry pi, follow this [instructions](https://www.reddit.com/r/selenium/comments/7341wt/success_how_to_run_selenium_chrome_webdriver_on/) <br/>
 ## Notes
 
   •When you are prompted with the mode you wish the code to run in, just press enter. If an error occurs, please try again, but this time enter 'iota' as the mode.<br/>
