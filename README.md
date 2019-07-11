@@ -18,8 +18,6 @@
 
 
   obs-> You also need to download [chromedriver](http://chromedriver.chromium.org/downloads)<br/><br/>
-
-  
         If you are on the raspberry pi, follow this [instructions](https://www.reddit.com/r/selenium/comments/7341wt/success_how_to_run_selenium_chrome_webdriver_on/) <br/>
 ## Notes
 
