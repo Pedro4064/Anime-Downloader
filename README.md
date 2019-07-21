@@ -14,7 +14,7 @@
 ### Needs to be installed separately  
   •[termcolor](https://pypi.org/project/termcolor/)<br/>
   •[selenium](https://pypi.org/project/selenium/)<br/>
-  •[progressBar](https://progressbar-2.readthedocs.io/en/latest/installation.html)<br/>
+  •[progressBar](https://pypi.org/project/progress/)<br/>
 
 
   obs-> You also need to download [chromedriver](http://chromedriver.chromium.org/downloads)<br/><br/>
