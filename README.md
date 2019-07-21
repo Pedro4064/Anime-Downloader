@@ -5,7 +5,7 @@
  ![alt text](https://raw.githubusercontent.com/Pedro4064/Anime-Downloader/master/Images/Main%20Screen.png)
 
 ## Python Modules
-  •To install all modules, run: 
+  •To install all modules run: <br/>
    `python -m pip install -r /path/to/requirements.txt`
 ### Preinstalled  
   •os<br/>
