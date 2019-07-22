@@ -221,6 +221,8 @@ while True:
 
 
 
-    except:
+    except Exception as e :
+        # Print the error since even when every thing goes ok it returns an error message
+        print(e)
         print(colored('[ERROR] Someting happend along the way, please try again. If the problem continues try with another anime and poset an issue on the github page'))
         print(colored('https://github.com/Pedro4064/AnimeDownloader','yellow'))
