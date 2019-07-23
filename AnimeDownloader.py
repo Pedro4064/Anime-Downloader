@@ -104,6 +104,7 @@ def Download():
     global directory
     global userName
     global password
+    global starEpisode
 
     episodeNumber = 1
     os.chdir(directory)
@@ -114,19 +115,33 @@ def Download():
 
     #Tries to download, but if fails it's because the authentication failed, so redirect the user to the Settings pag e
     try:
+
         for link in rawLinks:
 
+            # If the episode number is smaller than the starEpisode number(which the default is 1) go to the next episode, else continue download
+            if episodeNumber < starEpisode:
 
-            response = requests.get(link, auth = (userName,password))
-            with open(aName+'_'+str(episodeNumber)+'.mp4','wb') as videoFile:
+                print("Skipping episode",episodeNumber)
+                # Update the episode number for namming purposes, and update the progress bar
+                episodeNumber+=1
+                progressBar.next()
+                continue
+            
+            else:
+                # Make a request to the url
+                response = requests.get(link, auth = (userName,password))
+                
+                # Create the .mp4 file and write binary content
+                with open(aName+'_'+str(episodeNumber)+'.mp4','wb') as videoFile:
 
-                videoFile.write(response.content)
+                    videoFile.write(response.content)
 
-            episodeNumber+=1
-            progressBar.next()
+                # Update the episode number for namming purposes, and update the progress bar
+                episodeNumber+=1
+                progressBar.next()
+
     except:
         print(colored('[ERROR] While downloading the episodes ','red'))
-
 
 def Movie():
 
@@ -184,6 +199,7 @@ while True:
     aName = ''
     mainLink = ''
     nEpisodes = 0
+    starEpisode = 1
     directory = ''
     driverPath = '/Applications/chromedriver'
     xPath = '//*[@id="__layout"]/div/div[1]/section/main/div[2]/div[3]/ul/li[%s]/a'
@@ -191,37 +207,78 @@ while True:
     userName = ''
     password = ''
 
-    try:
+    # Check if any parameters were passed 
+    if len(sys.argv) != 1:
+        
+        # If the argument passed is -h, desplay a walkthrough message
+        if sys.argv[1] == '-h':
+            Logo()
+            print(colored('You may start the download from any episode, just pass the number of such episode as an argument','yellow'))
+            print(colored('ex: python3.X AnimeDownloader.py 13 ----> It will start the download from episode 13','yellow'))
+            quit()
 
-        Logo()
+        # If the argument passed is not -h, check if it was a number 
+        try:
 
-        print('1. Series')
-        print('2. Movie')
+            # the starEpisode will be the parameter passed
+            starEpisode = int(sys.argv[1])
 
-        answer  = input('-> ')
-        if answer == '1':
-
-            os.system('clear')
+            #If the argument is a number, prompt the user for the mode in which the program should run
+            Logo()
             mode = input('In which mode should the code run (enter for normal mode)?')
-            User()
+            
+            #If the argument is a number, prompt the user for information
+            Logo()
+            print(colored("Program wil download starting from "+str(starEpisode)+"\n","green"))
+
+            aName     = input('•The name of the anime you wish to download->')
+            mainLink  = input('•The link for the first episode->')
+            nEpisodes = int(input('•The number of episodes in the series->'))
+            directory = input('•The directory you want the save the episodes->')
+
+            # Go to the download process
             GatherLinks(mode)
             Download()
-
-        elif answer == '2':
+        
+        # If not a number, print an error massage and quit the program
+        except Exception as e:
+            print(e)
+            print(colored("The argument passed was neither -h (for info) nor a number (to start the download from)","red"))
+            quit()
     
-            Movie()
+    # If no argument is passed
+    else:
+        try:
+
+            Logo()
+
+            print('1. Series')
+            print('2. Movie')
+
+            answer  = input('-> ')
+            if answer == '1':
+
+                os.system('clear')
+                mode = input('In which mode should the code run (enter for normal mode)?')
+                User()
+                GatherLinks(mode)
+                Download()
+
+            elif answer == '2':
+        
+                Movie()
 
 
-        else:
-            quit()
+            else:
+                quit()
 
-        again = input('\nAgaing ?')
-        if again.casefold() == 'n':
-            quit()
+            again = input('\nAgaing ?')
+            if again.casefold() == 'n':
+                quit()
 
 
 
-    except Exception as e:
-        print(e)
-        print(colored('[ERROR] Someting happend along the way, please try again. If the problem continues try with another anime and poset an issue on the github page'))
-        print(colored('https://github.com/Pedro4064/AnimeDownloader','yellow'))
+        except Exception as e:
+            print(e)
+            print(colored('[ERROR] Someting happend along the way, please try again. If the problem continues try with another anime and poset an issue on the github page'))
+            print(colored('https://github.com/Pedro4064/AnimeDownloader','yellow'))
