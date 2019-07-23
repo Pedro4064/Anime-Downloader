@@ -49,6 +49,7 @@ def GatherLinks(parameter):
     global direcotry
     global driverPath
     global xPath
+    global starEpisode
 
     #Add the headless option
     options = Options()
@@ -83,14 +84,29 @@ def GatherLinks(parameter):
 
     try:
 
+        # Goes link by link to get the raw .mp4 link
+        linkNumber = 1
+
         for link in episodeLinks:
 
-            driver.get(link)
-            time.sleep(5) #Wait 5 seconds for the page to finish loading
+            # If the episode number is less than the starEpisode number(which by default is 1) go to next link, else extract the raw link
+            if linkNumber <starEpisode:
+                
+                # Update the link number and print to notify the user that it will skip the episodes 
+                print("Skiping",linkNumber,"episode")
+                linkNumber+=1
+                continue
+            
+            # Extrect the raw link
+            else:
+                driver.get(link)
+                time.sleep(5) #Wait 5 seconds for the page to finish loading
 
 
-            rawLinks.append(driver.find_element_by_xpath('//*[@id="__layout"]/div/div[1]/section/div/div/video').get_attribute('src'))
-            print(driver.find_element_by_xpath('//*[@id="__layout"]/div/div[1]/section/div/div/video').get_attribute('src'))
+                rawLinks.append(driver.find_element_by_xpath('//*[@id="__layout"]/div/div[1]/section/div/div/video').get_attribute('src'))
+                print(driver.find_element_by_xpath('//*[@id="__layout"]/div/div[1]/section/div/div/video').get_attribute('src'))
+                
+                linkNumber+=1
 
     except:
 
@@ -113,28 +129,18 @@ def Download():
 
 
 
-    #Tries to download, but if fails it's because the authentication failed, so redirect the user to the Settings pag e
+    #Tries to download, but if fails print an error message
     try:
 
         for link in rawLinks:
 
-            # If the episode number is smaller than the starEpisode number(which the default is 1) go to the next episode, else continue download
-            if episodeNumber < starEpisode:
-
-                print("Skipping episode",episodeNumber)
-                # Update the episode number for namming purposes, and update the progress bar
-                episodeNumber+=1
-                progressBar.next()
-                continue
+            # Make a request to the url
+            response = requests.get(link, auth = (userName,password))
             
-            else:
-                # Make a request to the url
-                response = requests.get(link, auth = (userName,password))
-                
-                # Create the .mp4 file and write binary content
-                with open(aName+'_'+str(episodeNumber)+'.mp4','wb') as videoFile:
+            # Create the .mp4 file and write binary content
+            with open(aName+'_'+str(episodeNumber)+'.mp4','wb') as videoFile:
 
-                    videoFile.write(response.content)
+                videoFile.write(response.content)
 
                 # Update the episode number for namming purposes, and update the progress bar
                 episodeNumber+=1
