@@ -25,6 +25,5 @@
 
   •Change the `driverPath = '/Applications/chromedriver'` to fit the location of the webDriver on your system.<br/>
   •When you are prompted with the mode you wish the code to run in, just press enter. If an error occurs, please try again, but this time enter `iota` as the mode.<br/>
-  •Sometimes you are prompted with an error message at the end of runtime. First check if the movie/series was really downloaded before retrying, it may return an error but still have downloaded the media correctly.<br/>
   •If you are on a Windows machine, you will have to change the `os.system('clear')` to `os.system('cls')`
 
