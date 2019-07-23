@@ -207,7 +207,7 @@ while True:
             GatherLinks(mode)
             Download()
 
-        if answer == '2':
+        elif answer == '2':
 
             Movie()
 
