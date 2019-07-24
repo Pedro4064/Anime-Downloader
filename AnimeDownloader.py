@@ -122,7 +122,8 @@ def Download():
     global password
     global starEpisode
 
-    # Set the episode number to the starEpisode(passed as an argument to start the download from)->If no argument i passed, the startEpisode = 1
+    # Set the episode number to the starEpisode(passed as an argument to start the download from)->If no argument is passed, the startEpisode = 1
+    # So the program won't rewrite another episode and will name the .mp4 file correctly
     episodeNumber = starEpisode
     os.chdir(directory)
 
@@ -198,7 +199,7 @@ def Logo():
 
 
 
-while True:
+if __name__ == '__main__':
 
     #Clear the variables
     episodeLinks = []
