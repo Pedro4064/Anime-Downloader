@@ -122,7 +122,8 @@ def Download():
     global password
     global starEpisode
 
-    episodeNumber = 1
+    # Set the episode number to the starEpisode(passed as an argument to start the download from)->If no argument i passed, the startEpisode = 1
+    episodeNumber = starEpisode
     os.chdir(directory)
 
     progressBar = IncrementalBar('Episodes Downloaded', max = len(rawLinks))
