@@ -237,7 +237,7 @@ if __name__ == '__main__':
             
             #If the argument is a number, prompt the user for information
             Logo()
-            print(colored("Program wil download starting from "+str(starEpisode)+"\n","green"))
+            print(colored("Program will download starting from "+str(starEpisode)+"\n","green"))
 
             aName     = input('•The name of the anime you wish to download->')
             mainLink  = input('•The link for the first episode->')
