@@ -155,6 +155,7 @@ def Download():
                 response = session.get(link)
                 
                 fileName = aName+'_'+str(episodeNumber)+'.mp4'
+                print(fileName)
 
                 # Create the .mp4 file and write binary content
                 with open(aName+'_'+str(episodeNumber)+'.mp4','wb') as videoFile:
@@ -164,6 +165,7 @@ def Download():
                 # Check to see the size of the file, if it is too small and error happened
                 if os.path.getsize(fileName) < 10000:
                     done = False
+                    print(os.path.getsize(fileName))
                 else:
                     done = True
 
