@@ -12,6 +12,7 @@ from progress.bar import IncrementalBar
 
 episodeLinks = []
 rawLinks = []
+referers = []
 aName = ''
 mainLink = ''
 nEpisodes = 0
@@ -43,6 +44,7 @@ def GatherLinks(parameter):
 
     global episodeLinks
     global rawLinks
+    global referers
     global aName
     global mainLink
     global nEpisodes
@@ -102,7 +104,10 @@ def GatherLinks(parameter):
                 driver.get(link)
                 time.sleep(5) #Wait 5 seconds for the page to finish loading
 
+                # append the episode link to be used as referer in the get request
+                referers.append(link)
 
+                # Append the mp4 file url
                 rawLinks.append(driver.find_element_by_xpath('//*[@id="__layout"]/div/div[1]/section/div/div/video').get_attribute('src'))
                 print(driver.find_element_by_xpath('//*[@id="__layout"]/div/div[1]/section/div/div/video').get_attribute('src'))
                 
@@ -115,6 +120,7 @@ def GatherLinks(parameter):
 def Download():
 
     global rawLinks
+    global referers
     global aName
     global nEpisodes
     global directory
@@ -134,19 +140,37 @@ def Download():
     #Tries to download, but if fails print an error message
     try:
 
-        for link in rawLinks:
+        for link,referer in zip(rawLinks,referers):
 
-            # Make a request to the url
-            response = requests.get(link, auth = (userName,password))
-            
-            # Create the .mp4 file and write binary content
-            with open(aName+'_'+str(episodeNumber)+'.mp4','wb') as videoFile:
+            # Set up the session config
+            session = requests.Session()
+            session.headers.update({'referer':referer})
 
-                videoFile.write(response.content)
+            print('referer:',referer)
+            print('raw:',link)
+
+            done = False
+            while done == False:
+                # Make a request to the url
+                response = session.get(link)
+                
+                fileName = aName+'_'+str(episodeNumber)+'.mp4'
+
+                # Create the .mp4 file and write binary content
+                with open(aName+'_'+str(episodeNumber)+'.mp4','wb') as videoFile:
+
+                    videoFile.write(response.content)
+
+                # Check to see the size of the file, if it is too small and error happened
+                if os.path.getsize(fileName) < 10000:
+                    done = False
+                else:
+                    done = True
+
 
                 # Update the episode number for namming purposes, and update the progress bar
-                episodeNumber+=1
-                progressBar.next()
+            episodeNumber+=1
+            progressBar.next()
 
     except:
         print(colored('[ERROR] While downloading the episodes ','red'))
@@ -161,7 +185,6 @@ def Movie():
 
     Logo()
     print(colored('Movie program being executed ...\n','green'))
-
     #Prompt the user for aditional information
     pageLink = input('•The link for the anime movie->')
     direcotry = input('•The directory you wish to save the movie in-> ')
@@ -182,11 +205,28 @@ def Movie():
     #Changes to the correct directory and then star the download
     os.chdir(direcotry)
 
-    with open(name+'.mp4','wb') as movie:
-        print(link)
-        response = requests.get(link, auth = ('pedro4064','P3dr0twistmoe'))
-        movie.write(response.content)
+    done = False
 
+    while done == False:
+        with open(name+'.mp4','wb') as movie:
+            print('raw:',link)
+            print('referer:',pageLink)
+            # Set up the session config for the get request
+            session = requests.Session()
+            session.headers.update({'referer':pageLink})
+            response = session.get(link)
+
+            movie.write(response.content)
+
+        
+        # Check to see the size of the file, if it is too short an error happened, so try again
+        fileName = name+'mp4'
+        
+        if os.path.getsize(fileName) < 10000:
+            print(os.path.getsize(fileName))
+            done = False
+        else:
+            done = True
     quit()
 
 def Logo():
@@ -197,7 +237,35 @@ def Logo():
     print('\n')
     print('\n')
 
+def EndLogo():
 
+    komi = """⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+                            ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣠⣤⣤⣶⣶⣶⣶⣶⣦⣤⣤⣄⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+                            ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣠⣴⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+                            ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣴⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+                            ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡴⣻⣽⣿⣿⣿⣿⣿⣿⡿⣿⣿⡿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+                            ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⡾⠋⣸⣿⣿⣿⣿⣿⣿⠟⠁⢀⣿⣿⡀⣟⣿⣿⣿⠿⣿⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+                            ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣴⢋⣾⣾⣿⣿⣯⡿⣽⡟⠁⠀⠀⠘⣿⣿⣿⣿⣿⣿⣿⣿⣿⣦⣼⣿⣿⣿⣿⣿⣿⠿⠿⣿⣿⣷⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+                            ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣸⠃⣾⣿⣿⣿⣿⣿⣿⠏⠀⠀⠀⠀⠀⠙⣟⢿⣿⣿⣿⣿⣿⣿⡌⠿⣿⣿⣿⣿⣿⡷⣦⣄⢹⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+    All Done!!!!            ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢹⣿⣿⣿⣿⣿⣿⣿⠏⠀⡠⠖⠛⠉⠉⠙⠛⠦⠀⠈⠙⠛⠛⠿⠛⠛⠉⠉⠛⠛⢿⣧⠘⣿⣿⣿⡏⡀⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+                            ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⣿⣿⣿⣿⣿⡟⠀⠞⠀⢀⣴⣿⣿⣶⡄⠀⠀⠀⠀⠀⠀⠀⢠⣶⣿⣿⣶⡀⠀⠹⡄⢸⣿⣿⣿⣿⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+                            ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠩⠛⢿⣿⣿⣇⠀⠀⠀⢸⣿⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⣿⣿⡇⠀⠀⠀⠀⣿⣿⣿⡁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+                            ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢰⢹⣿⣿⡏⠁⠀⠀⠀⠙⠛⠛⠛⠁⠀⠀⠀⠀⠀⠀⠀⡈⠙⠛⠛⠋⠀⠀⠀⠀⠀⠈⣠⣄⠀⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+                            ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⣼⣿⣿⡇⠀⠀⠀⠁⠒⠀⠀⠂⠁⠀⠀⠀⠀⠀⠀⠀⠀⠐⠀⠀⠒⠈⠀⠀⠀⠀⣐⠀⠁⢀⠇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+                            ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⣇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⠛⠊⣀⠞⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+                            ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⣿⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣿⣶⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+                            ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⣿⣿⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣿⡿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+                            ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⣿⣿⣿⣿⣶⣤⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣶⣿⣿⣿⡇⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+                            ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠙⢿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣶⣤⡄⠀⠀⠀⣠⣤⣶⣾⣿⣿⣿⣿⣿⣿⡿⢃⢸⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+                            ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣤⣄⡿⠁⣿⠛⣿⣿⣿⣿⣿⣿⣿⡇⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿⣛⣻⣏⣁⢸⠸⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+                            ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⡇⣸⣿⣿⣿⣿⣿⣿⣿⡟⠁⡇⠀⠀⠀⣿⠈⢻⣿⣿⣿⣿⣿⣿⣿⣿⣾⡄⢇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+                            ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⣧⣿⣿⣿⣿⠿⠿⢛⠏⠀⠀⠸⡀⠀⢠⠇⠀⠀⠹⡛⠻⠿⣿⣿⣿⣿⣿⣷⠸⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+                            ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⠛⠋⠉⠀⠀⠀⡌⠀⠀⠀⠀⠳⣀⠏⢀⠀⠀⠀⢱⠀⠀⠀⠈⠉⠛⣿⣿⡆⢧⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+                            ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢰⣿⣿⣿⣧⠂⠀⠀⠀⠀⣜⡠⣴⣶⢥⣍⠲⡋⠒⣡⣼⣳⢢⣄⣣⠀⠀⠀⠀⠀⠘⣿⣷⢸⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+                            ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣸⣿⣿⣿⣿⡘⡀⠀⠀⠀⢠⢣⢣⢿⣏⣞⣿⣹⡿⣽⣻⣻⣣⢻⡇⠀⠀⠀⢠⠁⠀⢹⣿⣾⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+                            ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⠷⠥⡀⠀⠀⠘⡞⡎⡞⣟⡿⡟⠉⢿⣷⣣⢧⢻⣻⠁⠀⠀⢀⠂⠀⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀"""
+
+    print(komi)
 
 if __name__ == '__main__':
 
@@ -247,7 +315,11 @@ if __name__ == '__main__':
             # Go to the download process
             GatherLinks(mode)
             Download()
-        
+
+            # print the final logo
+            EndLogo()
+
+            
         # If not a number, print an error massage and quit the program
         except Exception as e:
             print(e)
