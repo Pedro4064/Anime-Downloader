@@ -62,7 +62,7 @@ def GatherLinks(parameter):
 
     #Go to the mainLink, gather all the episode links and append them to the episodeLinks list
     driver.get(mainLink)
-    time.sleep(5)
+    time.sleep(7)
 
     print('\n')
     print('Link for all the desired episodes: ')
@@ -146,8 +146,8 @@ def Download():
             session = requests.Session()
             session.headers.update({'referer':referer})
 
-            print('referer:',referer)
-            print('raw:',link)
+            # print('referer:',referer)
+            # print('raw:',link)
 
             done = False
             while done == False:
@@ -155,7 +155,7 @@ def Download():
                 response = session.get(link)
                 
                 fileName = aName+'_'+str(episodeNumber)+'.mp4'
-                print(fileName)
+                
 
                 # Create the .mp4 file and write binary content
                 with open(aName+'_'+str(episodeNumber)+'.mp4','wb') as videoFile:

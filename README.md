@@ -11,11 +11,12 @@
   •os<br/>
   •time<br/>
   •sys<br/>
-  •requests<br/>
+  
 ### Needs to be installed separately  
   •[termcolor](https://pypi.org/project/termcolor/)<br/>
   •[selenium](https://pypi.org/project/selenium/)<br/>
   •[progress](https://pypi.org/project/progress/)<br/>
+  •[requests](https://pypi.org/project/requests/2.7.0/)<br/>
 
 ## Chrome Driver
 
