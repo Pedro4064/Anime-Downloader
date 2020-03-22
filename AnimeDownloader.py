@@ -16,7 +16,7 @@ referers = []
 aName = ''
 mainLink = ''
 nEpisodes = 0
-directory = ''
+directory = '/animes'
 driverPath = '/usr/local/bin/chromedriver'
 xPath = '//*[@id="__layout"]/div/div[1]/section/main/div[2]/div[3]/ul/li[%s]/a'
 
@@ -38,7 +38,6 @@ def User():
     aName     = input('•The name of the anime you wish to download->')
     mainLink  = input('•The link for the first episode->')
     nEpisodes = int(input('•The number of episodes(or the number you want to download)->'))
-    directory = input('•The directory you want the save the episodes->')
 
 def GatherLinks(parameter):
 
@@ -182,6 +181,7 @@ def Download():
 def Movie():
 
     global driverPath
+    global direcotry
 
     xPathMovie = '//*[@id="__layout"]/div/div[1]/section/div/div/video'
 
@@ -191,7 +191,6 @@ def Movie():
     print(colored('Movie program being executed ...\n','green'))
     #Prompt the user for aditional information
     pageLink = input('•The link for the anime movie->')
-    direcotry = input('•The directory you wish to save the movie in-> ')
     name = input('•The name of the movie you are downloading-> ')
 
     #Add the headless option
