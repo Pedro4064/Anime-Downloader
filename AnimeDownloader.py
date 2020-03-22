@@ -281,7 +281,6 @@ if __name__ == '__main__':
     mainLink = ''
     nEpisodes = 0
     starEpisode = 1
-    directory = ''
     driverPath = '/Applications/chromedriver'
     xPath = '//*[@id="__layout"]/div/div[1]/section/main/div[2]/div[3]/ul/li[%s]/a'
 
