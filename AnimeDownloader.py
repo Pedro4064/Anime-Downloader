@@ -60,7 +60,7 @@ def GatherLinks(parameter):
     options.add_argument('--disable-gpu')
 
     #Specifies the location of the webDriver (path as global variable)
-    driver = webdriver.Chrome(options=options, executable_path=driverPath)
+    driver = webdriver.Chrome(options=options)
 
     #Go to the mainLink, gather all the episode links and append them to the episodeLinks list
     driver.get(mainLink)
@@ -201,7 +201,7 @@ def Movie():
     options.add_argument('--disable-gpu')
 
     #Specifies the location of the webDriver (path as global variable)
-    driver = webdriver.Chrome(options=options, executable_path=driverPath)
+    driver = webdriver.Chrome(options=options)
 
     #gathers the link for the mp4 file and then goes to it
     driver.get(pageLink)
