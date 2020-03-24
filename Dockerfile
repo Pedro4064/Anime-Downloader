@@ -20,7 +20,7 @@ RUN mkdir animes
 # create a scritps directory and  clone the anime-downloader repo
 RUN mkdir scripts
 WORKDIR /scripts
-RUN git clone -b Docker https://github.com/Pedro4064/Anime-Downloader.git && git pull origin Docker
+RUN git clone -b Docker --depth=1 https://github.com/Pedro4064/Anime-Downloader.git  
 WORKDIR /scripts/Anime-Downloader
 
 # download nano for debug
