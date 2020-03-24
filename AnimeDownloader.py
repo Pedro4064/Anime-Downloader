@@ -135,9 +135,9 @@ def Download():
     episodeNumber = starEpisode
     os.chdir(directory)
 
-    progressBar = IncrementalBar('Episodes Downloaded', max = len(rawLinks))
-
-
+    # Formating
+    print()
+    print()
 
     #Tries to download, but if fails print an error message
     try:
@@ -163,7 +163,6 @@ def Download():
                 with open(aName+'_'+str(episodeNumber)+'.mp4','wb') as videoFile:
 
                     # Create a progress bar
-                    print(response.headers['Content-Length'])
                     progress_bar = tqdm(total=int(response.headers['Content-Length']))
                     
                     # Go over the blocks of the response to avoid holding everything in memory
@@ -189,7 +188,7 @@ def Download():
 
                 # Update the episode number for namming purposes, and update the progress bar
             episodeNumber+=1
-            progressBar.next()
+            
 
     except:
         print(colored('[ERROR] While downloading the episodes ','red'))
@@ -229,15 +228,27 @@ def Movie():
     done = False
 
     while done == False:
+
         with open(name+'.mp4','wb') as movie:
             print('raw:',link)
             print('referer:',pageLink)
+
             # Set up the session config for the get request
             session = requests.Session()
             session.headers.update({'referer':pageLink})
-            response = session.get(link)
+            response = session.get(link, stream=True)
 
-            movie.write(response.content)
+            # Create a progress bar
+            progress_bar = tqdm(total=int(response.headers['Content-Length']))
+
+            # Go over the blocks of the response to avoid holding everything in memory
+            for chunk in response.iter_content(512):
+                
+                # Write to file
+                movie.write(chunk)
+
+                # update the progress bar
+                progress_bar.update(512)
 
         
         # Check to see the size of the file, if it is too short an error happened, so try again
@@ -248,6 +259,7 @@ def Movie():
             done = False
         else:
             done = True
+            progress_bar.close()
     quit()
 
 def Logo():
