@@ -163,6 +163,7 @@ def Download():
                 with open(aName+'_'+str(episodeNumber)+'.mp4','wb') as videoFile:
 
                     # Create a progress bar
+                    print(response.headers['Content-Length'])
                     progress_bar = tqdm(total=response.headers['Content-Length'])
                     
                     # Go over the blocks of the response to avoid holding everything in memory
