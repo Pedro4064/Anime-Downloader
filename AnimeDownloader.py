@@ -164,7 +164,7 @@ def Download():
 
                     # Create a progress bar
                     print(response.headers['Content-Length'])
-                    progress_bar = tqdm(total=response.headers['Content-Length'])
+                    progress_bar = tqdm(total=int(response.headers['Content-Length']))
                     
                     # Go over the blocks of the response to avoid holding everything in memory
                     for chunk in response.iter_content(512):
@@ -175,6 +175,7 @@ def Download():
                         # update the progress bar
                         progress_bar.update(512)
 
+                
                 # Check to see the size of the file, if it is too small and error happened
                 if os.path.getsize(fileName) < 10000:
                     done = False
