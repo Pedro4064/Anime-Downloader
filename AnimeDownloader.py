@@ -2,6 +2,7 @@ import os
 import time
 import sys
 import requests
+from tqdm import tqdm
 from termcolor import colored
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -153,7 +154,7 @@ def Download():
             done = False
             while done == False:
                 # Make a request to the url
-                response = session.get(link)
+                response = session.get(link, stream=True)
                 
                 fileName = aName+'_'+str(episodeNumber)+'.mp4'
                 
@@ -161,14 +162,27 @@ def Download():
                 # Create the .mp4 file and write binary content
                 with open(aName+'_'+str(episodeNumber)+'.mp4','wb') as videoFile:
 
-                    videoFile.write(response.content)
+                    # Create a progress bar
+                    progress_bar = tqdm(total=response.headers['Content-Length'])
+                    
+                    # Go over the blocks of the response to avoid holding everything in memory
+                    for chunk in response.iter_content(512):
+                        
+                        # Write to file
+                        videoFile.write(chunk)
+
+                        # update the progress bar
+                        progress_bar.update(512)
 
                 # Check to see the size of the file, if it is too small and error happened
                 if os.path.getsize(fileName) < 10000:
                     done = False
                     print(os.path.getsize(fileName))
                 else:
+                    # If download complete, close progress bar
+                    progress_bar.close()
                     done = True
+
 
 
                 # Update the episode number for namming purposes, and update the progress bar
