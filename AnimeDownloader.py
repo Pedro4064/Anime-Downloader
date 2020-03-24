@@ -196,7 +196,7 @@ def Download():
 def Movie():
 
     global driverPath
-    global direcotry
+    global directory
 
     xPathMovie = '//*[@id="__layout"]/div/div[1]/section/div/div/video'
 
@@ -223,7 +223,7 @@ def Movie():
 
     link = driver.find_element_by_xpath(xPathMovie).get_attribute('src')
     #Changes to the correct directory and then star the download
-    os.chdir(direcotry)
+    os.chdir(directory)
 
     done = False
 
@@ -375,18 +375,18 @@ if __name__ == '__main__':
                 User()
                 GatherLinks(mode)
                 Download()
+                EndLogo()
 
             elif answer == '2':
         
                 Movie()
+                EndLogo()
 
 
             else:
                 quit()
 
-            again = input('\nAgaing ?')
-            if again.casefold() == 'n':
-                quit()
+            
 
 
 
