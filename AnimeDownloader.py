@@ -230,9 +230,13 @@ def Movie():
     while done == False:
 
         with open(name+'.mp4','wb') as movie:
+            print()
+            print()
             print('raw:',link)
             print('referer:',pageLink)
-
+            print()
+            print()
+            
             # Set up the session config for the get request
             session = requests.Session()
             session.headers.update({'referer':pageLink})
