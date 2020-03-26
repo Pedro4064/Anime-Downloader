@@ -261,6 +261,7 @@ def download_episode():
 
     # Get the data 
     episode_data = episodes_data[0]
+    print(episode_data)
 
     # Remove that episode_data from the list of episodes so other threads don't download the same episode
     episodes_data = episodes_data[1:]
@@ -304,7 +305,7 @@ if __name__ == "__main__":
     create_progress_bars()
 
     # Create 5 Threads (number of episodes downloaded concurrently)
-    number_of_pools = 5
+    number_of_pools = 3
     pool = ThreadPoolExecutor(number_of_pools)
     threads = []
 
@@ -318,7 +319,11 @@ if __name__ == "__main__":
     while done == False:
 
         # check to see if all threads finished
-        status = [stat.done() for stat in threads]
+        status = []
+        for thread in threads:
+            print(thread.done())
+            status.append(thread.done()
+            )
         if False not in status:
             done = True
             end_logo()
