@@ -15,7 +15,7 @@ class Moe(webdriver.Chrome,webdriver.chrome.options.Options,webdriver.common.by.
 
         # Added the headless option 
         self.options = webdriver.chrome.options.Options()
-        self.options.add_argument('--headless')options = Options()
+        self.options.add_argument('--headless')
         self.options.add_argument('--headless')
         self.options.add_argument('--no-sandbox')
         self.options.add_argument('--disable-gpu')
