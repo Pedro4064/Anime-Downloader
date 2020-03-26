@@ -262,7 +262,7 @@ def download_episode():
 
     # Get the data 
     episode_data = episodes_data[0]
-    print(episode_data)
+    # print(episode_data)
 
     # Remove that episode_data from the list of episodes so other threads don't download the same episode
     episodes_data = episodes_data[1:]
@@ -288,6 +288,7 @@ def download_episode():
         # Go over the blocks of the response to avoid holding everything in memory
         for chunk in response.iter_content(512):
             
+            print('downloading...')
             # Write to file
             video_file.write(chunk)
 
