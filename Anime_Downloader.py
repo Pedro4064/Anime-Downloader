@@ -309,8 +309,12 @@ if __name__ == "__main__":
     get_anime_data()
     create_progress_bars()
 
-    # Create 5 Threads (number of episodes downloaded concurrently)
-    number_of_pools = 5
+    # Create up to 5 Threads (number of episodes downloaded concurrently)
+    if len(episodes_data) >= 5:
+        number_of_pools = 5
+    else:
+        number_of_pools = len(episodes_data)
+        
     # with ThreadPoolExecutor(max_workers=number_of_pools) as excecutor:
 
     threads = []
@@ -322,16 +326,6 @@ if __name__ == "__main__":
         threads[i].start()
 
 
-    done = False
-    while done == False:
+    for thread in threads:
 
-        # # check to see if all threads finished
-        # status = []
-        # for thread in threads:
-        #     print(thread.done())
-        #     status.append(thread.done()
-        #     )
-        # if False not in status:
-        #     done = True
-        #     end_logo()
-        pass
+        thread.join()
