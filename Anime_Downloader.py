@@ -285,14 +285,13 @@ def download_episode():
 
     # Create the file
     os.system('touch '+file_name)
-    
+
     # Create the file and open it in Write binary mode
     with open(file_name+'_'+str(episode_data['episode_number'])+'.mp4','wb') as video_file:
 
         # Go over the blocks of the response to avoid holding everything in memory
         for chunk in response.iter_content(512):
             
-            print('downloading...')
             # Write to file
             video_file.write(chunk)
 
