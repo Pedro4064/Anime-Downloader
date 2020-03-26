@@ -310,7 +310,7 @@ if __name__ == "__main__":
     create_progress_bars()
 
     # Create 5 Threads (number of episodes downloaded concurrently)
-    number_of_pools = 2
+    number_of_pools = 5
     # with ThreadPoolExecutor(max_workers=number_of_pools) as excecutor:
 
     threads = []
