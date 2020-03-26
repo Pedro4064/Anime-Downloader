@@ -93,7 +93,9 @@ class Moe(webdriver.Chrome,webdriver.chrome.options.Options,webdriver.common.by.
                     continue
                 
         
-
+        print()
+        print()
+        
         #  Go to each url and get the raw url 
         for episode_number,url in enumerate(urls):
 
