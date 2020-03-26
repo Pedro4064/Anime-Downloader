@@ -183,7 +183,7 @@ def user_interface():
     global main_link
 
     os.system('clear')
-    Logo()
+    logo()
 
     #Prompt the user for information
     anime_name     = input('•The name of the anime you wish to download->')
