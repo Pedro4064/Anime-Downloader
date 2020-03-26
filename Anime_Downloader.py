@@ -275,7 +275,7 @@ def download_episode():
     session.headers.update({'referer':episode_data['referer']})
 
     # Make the get request
-    response = session.get(link, stream=True)
+    response = session.get(episode_data['raw_url'], stream=True)
 
     # Format the file name
     file_name = anime_name+'_'+str(episode_data['episode_number'])+'.mp4'
