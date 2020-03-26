@@ -257,6 +257,7 @@ def download_episode():
 
     # check if the list is empty (if it is,all episodes were already downloaded, return None)
     if len(episodes_data) == 0:
+        print('No more episodes to download')
         return None  
 
     # Get the data 
