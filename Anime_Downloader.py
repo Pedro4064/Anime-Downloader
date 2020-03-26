@@ -120,6 +120,9 @@ class Moe(webdriver.Chrome,webdriver.chrome.options.Options,webdriver.common.by.
                 print(e)
 
         # return two lists, one with the mp4 urls and another with their respective 'referers'
+        print()
+        print()
+
         return [{'episode_number':episode_number,'referer':referer, 'raw_url': raw_url} for episode_number,referer,raw_url in zip(episode_numbers,urls,rawUrls)]
 
     def finish(self):
@@ -258,7 +261,6 @@ def download_episode():
 
     # check if the list is empty (if it is,all episodes were already downloaded, return None)
     if len(episodes_data) == 0:
-        print('No more episodes to download')
         return None  
 
     # Get the data 
