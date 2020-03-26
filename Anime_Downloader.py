@@ -131,6 +131,7 @@ anime_name = ''
 main_link = ''
 number_of_episodes = ''
 episodes_data = []
+progress_bars = []
 first_episode = ''
 last_episode = ''
 
@@ -225,4 +226,40 @@ def get_anime_data():
         # If the user wants to download until the last episode, don't change the list
         episodes_data = episodes_data
 
-    
+def create_progress_bars():
+    global episodes_data
+    global progress_bars
+
+    # Create a list containing tqdm objects (progress bars)
+    for bar_position,i in episodes_data:
+        progress_bars.append()
+
+def download_episode():
+
+    global episodes_data
+    global anime_name
+
+    # check if the list is empty (if it is,all episodes were already downloaded, return None)
+    if len(episodes_data) == 0:
+        return None  
+
+    # Get the data 
+    episode_data = episodes_data[0]
+
+    # Remove that episode_data from the list of episodes so other threads don't download the same episode
+    episodes_data = episodes_data[1:]
+
+    # Change to the correct directory 
+    os.chdir('/animes')
+
+
+    ######## start download sequence ########
+     # Set up the session config
+    session = requests.Session()
+    session.headers.update({'referer':episode_data['referer']})
+
+    # Make the get request
+    response = session.get(link, stream=True)
+
+    # Format the file name
+    file_name = anime_name+'_'+str(episode_data['episode_number'])+'.mp4'
