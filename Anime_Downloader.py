@@ -316,7 +316,7 @@ if __name__ == "__main__":
     while done == False:
 
         # check to see if all threads finished
-        status = [stat for stat.done() in threads]
+        status = [stat.done() for stat in threads]
         if False not in status:
             done = True
             end_logo()
