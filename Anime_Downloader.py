@@ -6,6 +6,7 @@ from tqdm import tqdm
 from termcolor import colored
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.support import expected_conditions
 from concurrent.futures import ThreadPoolExecutor
 
 
