@@ -7,7 +7,8 @@ from termcolor import colored
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support import expected_conditions
-from concurrent.futures import ThreadPoolExecutor
+# from concurrent.futures import ThreadPoolExecutor
+import threading
 
 
 class Moe(webdriver.Chrome,webdriver.chrome.options.Options,webdriver.common.by.By,webdriver.support.ui.WebDriverWait):
@@ -309,25 +310,27 @@ if __name__ == "__main__":
 
     # Create 5 Threads (number of episodes downloaded concurrently)
     number_of_pools = 2
-    with ThreadPoolExecutor(max_workers=number_of_pools) as excecutor:
+    # with ThreadPoolExecutor(max_workers=number_of_pools) as excecutor:
 
-        threads = []
+    threads = []
 
-        for i in range(number_of_pools):
+    for i in range(number_of_pools):
 
-            # Start each thread
-            threads.append(excecutor.submit(download_episode))
+        # Start each thread
+        threads.append(threading.Thread(target=download_episode))
+        threads[i].start()
 
 
     done = False
     while done == False:
 
-        # check to see if all threads finished
-        status = []
-        for thread in threads:
-            print(thread.done())
-            status.append(thread.done()
-            )
-        if False not in status:
-            done = True
-            end_logo()
+        # # check to see if all threads finished
+        # status = []
+        # for thread in threads:
+        #     print(thread.done())
+        #     status.append(thread.done()
+        #     )
+        # if False not in status:
+        #     done = True
+        #     end_logo()
+        pass
