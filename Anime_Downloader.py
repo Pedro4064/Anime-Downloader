@@ -283,8 +283,6 @@ def download_episode():
     # Format the file name
     file_name = anime_name+'_'+str(episode_data['episode_number'])+'.mp4'
 
-    # Create the file
-    os.system('touch '+file_name)
 
     # Create the file and open it in Write binary mode
     with open(file_name+'_'+str(episode_data['episode_number'])+'.mp4','wb') as video_file:
@@ -314,7 +312,7 @@ if __name__ == "__main__":
         number_of_pools = 5
     else:
         number_of_pools = len(episodes_data)
-        
+
     # with ThreadPoolExecutor(max_workers=number_of_pools) as excecutor:
 
     threads = []
