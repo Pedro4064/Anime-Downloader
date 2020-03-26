@@ -308,25 +308,25 @@ if __name__ == "__main__":
 
     # Create 5 Threads (number of episodes downloaded concurrently)
     number_of_pools = 3
-    pool = ThreadPoolExecutor(number_of_pools)
-    threads = []
+    with ThreadPoolExecutor(max_workers=10) as excecutor:
 
-    for i in range(number_of_pools):
+        threads = []
 
-        # Start each thread
-        threads.append(pool.submit(download_episode))
+        for i in range(number_of_pools):
+
+            # Start each thread
+            threads.append(excecutor.submit(download_episode))
 
 
     done = False
     while done == False:
 
-        # # check to see if all threads finished
-        # status = []
-        # for thread in threads:
-        #     print(thread.done())
-        #     status.append(thread.done()
-        #     )
-        # if False not in status:
-        #     done = True
-        #     end_logo()
-        pass
+        # check to see if all threads finished
+        status = []
+        for thread in threads:
+            print(thread.done())
+            status.append(thread.done()
+            )
+        if False not in status:
+            done = True
+            end_logo()
