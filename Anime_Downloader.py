@@ -319,12 +319,13 @@ if __name__ == "__main__":
     done = False
     while done == False:
 
-        # check to see if all threads finished
-        status = []
-        for thread in threads:
-            print(thread.done())
-            status.append(thread.done()
-            )
-        if False not in status:
-            done = True
-            end_logo()
+        # # check to see if all threads finished
+        # status = []
+        # for thread in threads:
+        #     print(thread.done())
+        #     status.append(thread.done()
+        #     )
+        # if False not in status:
+        #     done = True
+        #     end_logo()
+        pass
