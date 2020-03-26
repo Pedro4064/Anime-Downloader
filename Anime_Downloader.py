@@ -230,9 +230,24 @@ def create_progress_bars():
     global episodes_data
     global progress_bars
 
+    progress_bar_number = len(episodes_data) - 1
+    
     # Create a list containing tqdm objects (progress bars)
-    for bar_position,i in episodes_data:
-        progress_bars.append()
+    for episode_data in episodes_data:
+        
+        # Set up the session config, make the get request and check the size of the file
+        session = requests.Session()
+        session.headers.update({'referer':episode_data['referer']})
+        response = session.get(link, stream=True)
+        content_size = int(response.headers['Content-Length'])
+
+        # Create a progress bar object and add to the dict
+        progress_bar = tqdm(total = content_size, position = progress_bar_number)
+        episode_data['progress_bar'] = progress_bar
+        
+        # Update the progress bar number
+        progress_bar_number-=1
+
 
 def download_episode():
 
@@ -263,3 +278,15 @@ def download_episode():
 
     # Format the file name
     file_name = anime_name+'_'+str(episode_data['episode_number'])+'.mp4'
+
+    # Create the file and open it in Write binary mode
+    with open(file_name+'_'+str(episode_data['episode_number'])+'.mp4','wb') as video_file:
+
+        # Go over the blocks of the response to avoid holding everything in memory
+        for chunk in response.iter_content(512):
+            
+            # Write to file
+            video_file.write(chunk)
+
+            # update the progress bar
+            episode_data['progress_bar'].update(512)
