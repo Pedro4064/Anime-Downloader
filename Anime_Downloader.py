@@ -314,6 +314,7 @@ if __name__ == "__main__":
         threads.append(pool.submit(download_episode))
 
 
+    done = False
     while done == False:
 
         # check to see if all threads finished
