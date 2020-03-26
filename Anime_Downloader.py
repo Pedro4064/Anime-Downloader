@@ -240,7 +240,7 @@ def create_progress_bars():
         # Set up the session config, make the get request and check the size of the file
         session = requests.Session()
         session.headers.update({'referer':episode_data['referer']})
-        response = session.get(link, stream=True)
+        response = session.get(episode_data['raw_url'], stream=True)
         content_size = int(response.headers['Content-Length'])
 
         # Create a progress bar object and add to the dict
