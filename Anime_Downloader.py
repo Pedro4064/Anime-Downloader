@@ -118,8 +118,9 @@ class Moe(webdriver.Chrome,webdriver.chrome.options.Options,webdriver.common.by.
             except Exception as e:
                 print(e)
 
+        print(urls)
         # return two lists, one with the mp4 urls and another with their respective 'referers'
-        return self.__format_data(urls,rawUrls,episode_numbers)
+        return [{'episode_number':episode_number,'referer':referer, 'raw_url': raw_url} for episode_number,referer,raw_url in zip(episode_numbers,urls,raw_urls)]
 
     def finish(self):
 
