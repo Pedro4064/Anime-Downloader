@@ -309,7 +309,7 @@ if __name__ == "__main__":
 
     # Create 5 Threads (number of episodes downloaded concurrently)
     number_of_pools = 3
-    with ThreadPoolExecutor(max_workers=1) as excecutor:
+    with ThreadPoolExecutor(workers=2) as excecutor:
 
         threads = []
 
