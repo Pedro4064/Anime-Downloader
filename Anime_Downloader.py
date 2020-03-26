@@ -202,7 +202,7 @@ def get_anime_data():
     moe = Moe()
 
     # Get the referers and raw urls for the anime
-    episodes_data = moe.get_raw_urls(url=main_link, number_of_episodes=1000)
+    episodes_data = moe.get_raw_urls(url=main_link, nEpisodes=1000)
 
     # Format the list to contain only the episodes the user wants to download
     # Try to transform the input data to int, if it fails the user typed enter and it will downlaod from the start
