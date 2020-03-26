@@ -295,7 +295,7 @@ def download_episode():
     download_episode()
 
 
-if if __name__ == "__main__":
+if __name__ == "__main__":
     
     logo()
     user_interface()
