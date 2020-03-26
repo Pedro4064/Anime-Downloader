@@ -6,6 +6,7 @@ from tqdm import tqdm
 from termcolor import colored
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from concurrent.futures import ThreadPoolExecutor
 
 
 class Moe(webdriver.Chrome,webdriver.chrome.options.Options,webdriver.common.by.By,webdriver.support.ui.WebDriverWait):
@@ -248,7 +249,6 @@ def create_progress_bars():
         # Update the progress bar number
         progress_bar_number-=1
 
-
 def download_episode():
 
     global episodes_data
@@ -290,3 +290,33 @@ def download_episode():
 
             # update the progress bar
             episode_data['progress_bar'].update(512)
+
+    # When it finishes, use recursion to call itself again and download another episode
+    download_episode()
+
+
+if if __name__ == "__main__":
+    
+    logo()
+    user_interface()
+    get_anime_data()
+    create_progress_bars()
+
+    # Create 5 Threads (number of episodes downloaded concurrently)
+    number_of_pools = 5
+    pool = ThreadPoolExecutor(number_of_pools)
+    threads = []
+
+    for i in range(number_of_pools):
+
+        # Start each thread
+        threads.append(pool.submit(download_episode))
+
+
+    while done == False:
+
+        # check to see if all threads finished
+        status = [stat for stat.done() in threads]
+        if False not in status:
+            done = True
+            end_logo()
