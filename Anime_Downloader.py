@@ -31,7 +31,7 @@ class Moe(webdriver.Chrome,webdriver.chrome.options.Options,webdriver.common.by.
         # Main twist Mow url 
         self.mainURL = 'https://twist.moe'
   
-    def __format_data(referers,raw_urls,episode_numbers):
+    def __format_data(self,referers,raw_urls,episode_numbers):
 
         formatte_data = [{'episode_number':episode_number,'referer':referer, 'raw_url': raw_url} for episode_number,referer,raw_url in zip(episode_numbers,referers,raw_urls)]
 
@@ -238,10 +238,9 @@ def create_progress_bars():
     global episodes_data
     global progress_bars
 
-    progress_bar_number = len(episodes_data) - 1
     
     # Create a list containing tqdm objects (progress bars)
-    for episode_data in episodes_data:
+    for progress_bar_number,episode_data in enumerate(episodes_data):
         
         # Set up the session config, make the get request and check the size of the file
         session = requests.Session()
@@ -253,8 +252,6 @@ def create_progress_bars():
         progress_bar = tqdm(total = content_size, position = progress_bar_number)
         episode_data['progress_bar'] = progress_bar
         
-        # Update the progress bar number
-        progress_bar_number-=1
 
 def download_episode():
 

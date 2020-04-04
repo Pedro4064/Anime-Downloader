@@ -11,17 +11,13 @@ RUN apt-get install -yqq unzip
 RUN wget -O /tmp/chromedriver.zip http://chromedriver.storage.googleapis.com/`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE`/chromedriver_linux64.zip
 RUN unzip /tmp/chromedriver.zip chromedriver -d /usr/local/bin/
 
-# install git 
-RUN apt-get install -y git
-
 # make a directory that will be mounted to the host machine
 RUN mkdir animes
 
-# create a scritps directory and  clone the anime-downloader repo
+# create a scritps directory and  copy the files from the directory on local host
 RUN mkdir scripts
 WORKDIR /scripts
-RUN git clone -b Docker --depth=1 https://github.com/Pedro4064/Anime-Downloader.git  
-WORKDIR /scripts/Anime-Downloader
+COPY . /scripts
 
 # download nano for debug
 RUN apt-get install -y nano
@@ -37,4 +33,4 @@ RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
 # Run the python script
-CMD [ "python3","AnimeDownloader.py" ]
+CMD [ "python3","Anime_Downloader.py" ]
